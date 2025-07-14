@@ -10,7 +10,7 @@ export default function Projects() {
           title="Personal Portfolio Site"
           description="A fast, modern personal website built with Vite, React, and MUI."
           techStack={["React", "TypeScript", "Vite", "MUI"]}
-          githubUrl="https://github.com/yourusername/portfolio"
+          githubUrl="https://github.com/cris-me/personal-site"
         />
         <IncomeTaxEstimatorCard />
       </Stack>
