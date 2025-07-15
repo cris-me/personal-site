@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,7 +8,8 @@ import {
   Stack,
   CircularProgress,
   Alert,
-} from '@mui/material';
+  Chip,
+} from "@mui/material";
 
 type TaxEstimate = {
   year: number;
@@ -19,6 +20,8 @@ type TaxEstimate = {
   totalCredits: number;
   refundOrOwed: number;
 };
+
+const techStack = ["Spring Boot", "MongoDB", "AWS"];
 
 export default function IncomeTaxEstimatorCard() {
   const [loading, setLoading] = useState(false);
@@ -31,27 +34,37 @@ export default function IncomeTaxEstimatorCard() {
     setData(null);
 
     try {
-      const res = await fetch('http://federal-tax-estimator-env.eba-xhmavxbb.us-east-2.elasticbeanstalk.com/api/taxes?email=jsmith@gmail.com&year=2024');
-      if (!res.ok) throw new Error('API request failed');
+      const res = await fetch(
+        "http://federal-tax-estimator-env.eba-xhmavxbb.us-east-2.elasticbeanstalk.com/api/taxes?email=jsmith@gmail.com&year=2024"
+      );
+      if (!res.ok) throw new Error("API request failed");
       const json = await res.json();
       setData(json);
     } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card elevation={3} sx={{ maxWidth: 600, width: '100%' }}>
+    <Card elevation={3} sx={{ maxWidth: 600, width: "100%" }}>
       <CardContent>
         <Typography variant="h5" gutterBottom>
           Income Tax Estimator
         </Typography>
 
-        <Typography variant="body2">
-          This project estimates U.S. federal income tax based on stored user income sources. To demonstate a sample user has been created with 2 stored tax documents.
+        <Typography variant="body2" gutterBottom>
+          This project estimates U.S. federal income tax based on stored user
+          income sources. To demonstate a sample user has been created with 2
+          stored tax documents.
         </Typography>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {techStack.map((tech) => (
+            <Chip key={tech} label={tech} size="small" />
+          ))}
+        </Stack>
 
         {loading && <CircularProgress />}
 
@@ -64,18 +77,33 @@ export default function IncomeTaxEstimatorCard() {
         {data && (
           <Stack spacing={1} mt={2}>
             <Typography variant="body2">Tax Year: {data.year}</Typography>
-            <Typography variant="body2">Total Income: ${data.totalIncome.toLocaleString()}</Typography>
-            <Typography variant="body2">Taxable Income: ${data.taxableIncome.toLocaleString()}</Typography>
-            <Typography variant="body2">Tax Owed: ${data.estimatedTaxOwed.toLocaleString()}</Typography>
-            <Typography variant="body2">Total Withheld: ${data.totalWithheld.toLocaleString()}</Typography>
-            <Typography variant="body2">Total Credits: ${data.totalCredits.toLocaleString()}</Typography>
-            <Typography variant="body2">Refund or Owed:{" "}
+            <Typography variant="body2">
+              Total Income: ${data.totalIncome.toLocaleString()}
+            </Typography>
+            <Typography variant="body2">
+              Taxable Income: ${data.taxableIncome.toLocaleString()}
+            </Typography>
+            <Typography variant="body2">
+              Tax Owed: ${data.estimatedTaxOwed.toLocaleString()}
+            </Typography>
+            <Typography variant="body2">
+              Total Withheld: ${data.totalWithheld.toLocaleString()}
+            </Typography>
+            <Typography variant="body2">
+              Total Credits: ${data.totalCredits.toLocaleString()}
+            </Typography>
+            <Typography variant="body2">
+              Refund or Owed:{" "}
               <Typography
                 component="strong"
-                sx={{ color: data.refundOrOwed < 0 ? "success.main" : "error.main", fontWeight: "bold" }}
+                sx={{
+                  color: data.refundOrOwed < 0 ? "success.main" : "error.main",
+                  fontWeight: "bold",
+                }}
                 display="inline"
-                >
-                ${Math.abs(data.refundOrOwed).toLocaleString()} {data.refundOrOwed < 0 ? "Refund" : "Owed"}
+              >
+                ${Math.abs(data.refundOrOwed).toLocaleString()}{" "}
+                {data.refundOrOwed < 0 ? "Refund" : "Owed"}
               </Typography>
             </Typography>
           </Stack>
@@ -84,13 +112,13 @@ export default function IncomeTaxEstimatorCard() {
 
       <CardActions>
         <Button
-            size="small"
-            href={"https://github.com/cris-me/federal-tax-estimate"}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </Button>
+          size="small"
+          href={"https://github.com/cris-me/federal-tax-estimate"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </Button>
         <Button onClick={fetchEstimate} disabled={loading}>
           Fetch Estimate
         </Button>
