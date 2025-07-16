@@ -35,7 +35,7 @@ export default function IncomeTaxEstimatorCard() {
 
     try {
       const res = await fetch(
-        "http://federal-tax-estimator-env.eba-xhmavxbb.us-east-2.elasticbeanstalk.com/api/taxes?email=jsmith@gmail.com&year=2024"
+        "https://api.crismelendez.dev/api/taxes?email=jsmith@gmail.com&year=2024"
       );
       if (!res.ok) throw new Error("API request failed");
       const json = await res.json();
